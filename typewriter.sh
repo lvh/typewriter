@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 build() {
 	$TEMPDIR = `mktemp -d -t typewriter`
 	if [ $? -ne 0 ]; then
