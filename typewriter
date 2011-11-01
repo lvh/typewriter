@@ -78,7 +78,7 @@ existingBranch() {
         echo "$0: gh-pages branch exists, but was not built by typewriter!"
         exit 1
     fi
-    $GIT ls-files -z | xargs -0 rm -f &> /dev/null
+    $GIT ls-files | xargs -0 rm -f &> /dev/null
 }
 
 newBranch() {
