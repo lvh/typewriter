@@ -36,7 +36,7 @@ prepare() {
     fi
 
     git pull origin gh-pages &> /dev/null
-    if [$? -eq 0]; then
+    if [ $? -eq 0 ]; then
         existingBranch
     else
         newBranch
@@ -70,23 +70,22 @@ build() {
     
     git clone $TEMPLATE $BUILDDIR
 
-    #pandoc README* --5sS -o $BUILDDIR/index.html
-    cat README* | $BUILDDIR/build > $BUILDDIR/index.html
+    $BUILDDIR/make clean
+    cp README* $BUILDDIR/src
+    $BUILDDIR/make build
     if [ $? -ne 0 ]; then
         echo "$0: build failed!"
         exit 1
     fi
 
-    touch $BUILDDIR/.typewriter
+    touch $BUILDDIR/build/.typewriter
+    touch $BUILDDIR/build/.nojekyll
 
     echo "$0: build finished"
 }
 
 commit() {
-    TARGET="$PWD/"
-    cd $BUILDDIR
-    git checkout-index -a --prefix=$TARGET
-    cd $TARGET
+    cp -R $BUILDDIR/build .
 
     git add -A
     git commit -m "typewriter build $(date -u +%Y-%m-%dT%H:%MZ)"
