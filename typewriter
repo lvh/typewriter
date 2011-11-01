@@ -1,13 +1,10 @@
 #!/usr/bin/env bash
 
-set -x
-
 config() {
     TEMPLATE=
     while getopts "t:" opt $@; do
       case $opt in
         t)
-            echo "activated t"
             TEMPLATE=$OPTARG
             ;;
         [?])
