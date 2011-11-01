@@ -31,6 +31,30 @@ usage() {
     exit 1
 }
 
+build() {
+    BUILDDIR=$(mktemp -d -t typewriter)
+    if [ $? -ne 0 ]; then
+        echo "$0: can't create temporary build directory!"
+        exit 1
+    fi
+    echo "$0: building in $BUILDDIR..."
+    
+    $GIT clone $TEMPLATE $BUILDDIR &> /dev/null
+
+    (cd $BUILDDIR && make clean &> /dev/null)
+    cp README* $BUILDDIR/src
+    (cd $BUILDDIR && make build &> /dev/null)
+    if [ $? -ne 0 ]; then
+        echo "$0: build failed!"
+        exit 1
+    fi
+
+    touch $BUILDDIR/build/.typewriter
+    touch $BUILDDIR/build/.nojekyll
+
+    echo "$0: build finished"
+}
+
 prepare() {
     $GIT update-index --ignore-submodules --refresh &> /dev/null
     if [ $? -ne 0 ]; then
@@ -50,50 +74,26 @@ prepare() {
 
 existingBranch() {
     $GIT checkout gh-pages &> /dev/null
-    if [! -f .typewriter]; then
+    if [ ! -f .typewriter ]; then
         echo "$0: gh-pages branch exists, but was not built by typewriter!"
         exit 1
     fi
-    $GIT ls-files -z | xargs -0 rm -f
+    $GIT ls-files -z | xargs -0 rm -f &> /dev/null
 }
 
 newBranch() {
-    $GIT symbolic-ref HEAD refs/heads/gh-pages
+    $GIT symbolic-ref HEAD refs/heads/gh-pages &> /dev/null
     rm .git/index
-    $GIT clean -fdx
-}
-
-build() {
-    BUILDDIR=$(mktemp -d -t typewriter)
-    if [ $? -ne 0 ]; then
-        echo "$0: can't create temporary build directory!"
-        exit 1
-    fi
-    echo "$0: building in $BUILDDIR..."
-    
-    $GIT clone $TEMPLATE $BUILDDIR
-
-    (cd $BUILDDIR && make clean)
-    cp README* $BUILDDIR/src
-    (cd $BUILDDIR && make build)
-    if [ $? -ne 0 ]; then
-        echo "$0: build failed!"
-        exit 1
-    fi
-
-    touch $BUILDDIR/build/.typewriter
-    touch $BUILDDIR/build/.nojekyll
-
-    echo "$0: build finished"
+    $GIT clean -fdx &> /dev/null
 }
 
 commit() {
     cp -R $BUILDDIR/build/ .
 
-    $GIT add -A
-    $GIT commit -m "typewriter build $(date -u +%Y-%m-%dT%H:%MZ)"
-    $GIT push origin gh-pages
-    $GIT checkout master
+    $GIT add -A &> /dev/null
+    $GIT commit -m "typewriter build $(date -u +%Y-%m-%dT%H:%MZ)" &> /dev/null
+    $GIT push origin gh-pages &> /dev/null
+    $GIT checkout master &> /dev/null
 }
 
 config $@
