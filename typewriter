@@ -21,6 +21,12 @@ config() {
         echo "$0: missing template!"
         usage
     fi
+
+    GIT="git"
+    which hub &> /dev/null
+    if [ $? -eq 0 ]; then
+        GIT="hub"
+    fi
 }
 
 usage() {
@@ -29,13 +35,13 @@ usage() {
 }
 
 prepare() {
-    git update-index --ignore-submodules --refresh &> /dev/null
+    $GIT update-index --ignore-submodules --refresh &> /dev/null
     if [ $? -ne 0 ]; then
         echo "$0: git repository not clean!"
         exit 1
     fi
 
-    git pull origin gh-pages &> /dev/null
+    $GIT pull origin gh-pages &> /dev/null
     if [ $? -eq 0 ]; then
         existingBranch
     else
@@ -46,18 +52,18 @@ prepare() {
 }
 
 existingBranch() {
-    git checkout gh-pages &> /dev/null
+    $GIT checkout gh-pages &> /dev/null
     if [! -f .typewriter]; then
         echo "$0: gh-pages branch exists, but was not built by typewriter!"
         exit 1
     fi
-    git ls-files -z | xargs -0 rm -f
+    $GIT ls-files -z | xargs -0 rm -f
 }
 
 newBranch() {
-    git symbolic-ref HEAD refs/heads/gh-pages
+    $GIT symbolic-ref HEAD refs/heads/gh-pages
     rm .git/index
-    git clean -fdx
+    $GIT clean -fdx
 }
 
 build() {
@@ -68,7 +74,7 @@ build() {
     fi
     echo "$0: building in $BUILDDIR..."
     
-    git clone $TEMPLATE $BUILDDIR
+    $GIT clone $TEMPLATE $BUILDDIR
 
     (cd $BUILDDIR && make clean)
     cp README* $BUILDDIR/src
@@ -87,10 +93,10 @@ build() {
 commit() {
     cp -R $BUILDDIR/build .
 
-    git add -A
-    git commit -m "typewriter build $(date -u +%Y-%m-%dT%H:%MZ)"
-    #git push origin gh-pages
-    #git checkout master
+    $GIT add -A
+    $GIT commit -m "typewriter build $(date -u +%Y-%m-%dT%H:%MZ)"
+    #$GIT push origin gh-pages
+    #$GIT checkout master
 }
 
 config $@
