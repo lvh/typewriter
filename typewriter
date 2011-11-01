@@ -95,8 +95,8 @@ commit() {
 
     $GIT add -A
     $GIT commit -m "typewriter build $(date -u +%Y-%m-%dT%H:%MZ)"
-    #$GIT push origin gh-pages
-    #$GIT checkout master
+    $GIT push origin gh-pages
+    $GIT checkout master
 }
 
 config $@
