@@ -90,7 +90,7 @@ newBranch() {
 commit() {
     cp -R $BUILDDIR/build/ .
 
-    $GIT add -A &> /dev/null
+    $GIT add -Af &> /dev/null
     $GIT commit -m "typewriter build $(date -u +%Y-%m-%dT%H:%MZ)" &> /dev/null
     echo "$0: copied and committed build"
 
