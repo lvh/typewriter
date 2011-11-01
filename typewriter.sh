@@ -2,6 +2,32 @@
 
 set -x
 
+config() {
+    TEMPLATE=
+    while getopts "t:" opt $@; do
+      case $opt in
+        t)
+            echo "activated t"
+            TEMPLATE=$OPTARG
+            ;;
+        [?])
+            echo "Invalid option: -$OPTARG" >&2
+            usage
+            ;;
+      esac
+    done
+
+    if [ -z $TEMPLATE ]; then
+        echo "$0: missing template!"
+        usage
+    fi
+}
+
+usage() {
+    echo "TODO. Sorry!"
+    exit 1
+}
+
 prepare() {
     git update-index --ignore-submodules --refresh &> /dev/null
     if [ $? -ne 0 ]; then
@@ -42,7 +68,7 @@ build() {
     fi
     echo "$0: building in $BUILDDIR..."
     
-    git clone $1 $BUILDDIR
+    git clone $TEMPLATE $BUILDDIR
 
     #pandoc README* --5sS -o $BUILDDIR/index.html
     cat README* | $BUILDDIR/build > $BUILDDIR/index.html
@@ -56,7 +82,7 @@ build() {
     echo "$0: build finished"
 }
 
-commit () {
+commit() {
     TARGET="$PWD/"
     cd $BUILDDIR
     git checkout-index -a --prefix=$TARGET
@@ -68,6 +94,9 @@ commit () {
     #git checkout master
 }
 
+config $@
 build
 prepare
 commit
+
+trap 'rm -rf $BUILDDIR' EXIT
