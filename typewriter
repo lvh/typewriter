@@ -70,9 +70,9 @@ build() {
     
     git clone $TEMPLATE $BUILDDIR
 
-    $BUILDDIR/make clean
+    (cd $BUILDDIR && make clean)
     cp README* $BUILDDIR/src
-    $BUILDDIR/make build
+    (cd $BUILDDIR && make build)
     if [ $? -ne 0 ]; then
         echo "$0: build failed!"
         exit 1
