@@ -18,6 +18,8 @@ Run ``typewriter`` from a clean git repository. Pass it a template (a git reposi
 
 The repository specification is parsed using git, or `hub`_ if it's available.
 
+.. _`hub`: https://github.com/defunkt/hub
+
 Themes
 ------
 
@@ -28,4 +30,4 @@ A theme has a ``src/`` folder. The ``README`` file is copied into that folder. t
 Take a look at `ttlvh`_ for an example of a theme. It's the one used to render the `github page for typewriter itself`_, amongst other things.
 
 .. _`ttlvh`: https://github.com/lvh/ttlvh
-.. _`github page for typewriter itself`: https://lvh.github.com/typewriter 
+.. _`github page for typewriter itself`: http://lvh.github.com/typewriter
