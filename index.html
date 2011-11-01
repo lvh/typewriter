@@ -25,7 +25,14 @@
             <p><a href="https://github.com/lvh/typewriter">typewriter</a> turns your README into a <a href="http://pages.github.com/">github page</a>.</p>
             <img src="http://dl.dropbox.com/u/38476311/typewriter.png" alt="image" />
             <h1 id="usage">Usage</h1>
-            <p>Run `typewriter` from a clean git repository.</p>
+            <p>Run <code>typewriter</code> from a clean git repository. Pass it a template (a git repository) with the <code>-t</code> flag:</p>
+            <pre><code>typewriter -t [template]
+            </code></pre>
+            <p>The repository specification is parsed using git, or `hub`_ if it’s available.</p>
+            <h1 id="themes">Themes</h1>
+            <p>Themes are git repositories. They’re cloned into a temporary directory and built using a Makefile. The <code>gh-pages</code> branch is checked out in the current repository. The working tree is cleaned up, assuming it was built by typewriter before (which is checked by the presence of <code>.typewriter</code>). The built theme is copied and committed in, and the result is pushed back to Github.</p>
+            <p>A theme has a <code>src/</code> folder. The <code>README</code> file is copied into that folder. typewriter then runs <code>make build</code>, and expects the contents in the <code>build/</code> folder.</p>
+            <p>Take a look at <a href="https://github.com/lvh/ttlvh">ttlvh</a> for an example of a theme. It’s the one used to render the <a href="https://lvh.github.com/typewriter">github page for typewriter itself</a>, amongst other things.</p>
         </section>
 
         <footer>
