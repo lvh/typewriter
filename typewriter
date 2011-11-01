@@ -91,7 +91,7 @@ build() {
 }
 
 commit() {
-    cp -R $BUILDDIR/build .
+    cp -R $BUILDDIR/build/ .
 
     $GIT add -A
     $GIT commit -m "typewriter build $(date -u +%Y-%m-%dT%H:%MZ)"
