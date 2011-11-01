@@ -92,7 +92,11 @@ commit() {
 
     $GIT add -A &> /dev/null
     $GIT commit -m "typewriter build $(date -u +%Y-%m-%dT%H:%MZ)" &> /dev/null
+    echo "$0: copied and committed build"
+
     $GIT push origin gh-pages &> /dev/null
+    echo "$0: pushed to github"
+
     $GIT checkout master &> /dev/null
 }
 
