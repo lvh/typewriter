@@ -6,7 +6,7 @@ typewriter
 .. _`typewriter`: https://github.com/lvh/typewriter 
 .. _`github page`: http://pages.github.com/
 
-.. image:: http://dl.dropbox.com/u/38476311/typewriter.png
+.. image:: http://project-logos.lvh.cc/typewriter.png
     :align: center
 
 Usage
